@@ -1,6 +1,3 @@
-// src/services/api.ts
-
-// Define o formato do Produto (baseado na FakeStoreAPI)
 export interface Product {
     id: number;
     title: string;
