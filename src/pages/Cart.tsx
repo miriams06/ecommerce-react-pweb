@@ -1,5 +1,7 @@
-import { Box, Typography, Button, List, ListItem, ListItemText, ListItemAvatar, Avatar, IconButton, Paper, Divider } from '@mui/material';
+import { Box, Typography, Button, List, ListItem, ListItemText, ListItemAvatar, Avatar, IconButton, Paper, Divider, Container, Grid, Card, CardContent } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 
@@ -9,45 +11,142 @@ export default function Cart() {
 
   if (cart.length === 0) {
     return (
-      <Box sx={{ p: 4, textAlign: 'center' }}>
-        <Typography variant="h5" gutterBottom>O carrinho está vazio.</Typography>
-        <Button variant="contained" onClick={() => navigate('/')} sx={{ mt: 2 }}>Ir para a Loja</Button>
+      <Box sx={{ 
+        height: '80vh', 
+        display: 'flex', 
+        flexDirection: 'column', 
+        justifyContent: 'center', 
+        alignItems: 'center',
+        bgcolor: '#f5f5f5' 
+      }}>
+        <ShoppingBagIcon sx={{ fontSize: 80, color: 'text.secondary', mb: 2 }} />
+        <Typography variant="h4" color="text.secondary" gutterBottom>
+          O teu carrinho está vazio
+        </Typography>
+        <Button variant="contained" size="large" onClick={() => navigate('/')} sx={{ mt: 2 }}>
+          Começar a Comprar
+        </Button>
       </Box>
     );
   }
 
   return (
-    <Box sx={{ p: 3, maxWidth: '800px', margin: '0 auto' }}>
-      <Typography variant="h4" gutterBottom>O Teu Carrinho</Typography>
-      <Paper elevation={2}>
-        <List>
-          {cart.map((item) => (
-            <div key={item.id}>
-              <ListItem secondaryAction={
-                <IconButton edge="end" onClick={() => removeFromCart(item.id)} color="error">
-                  <DeleteIcon />
-                </IconButton>
-              }>
-                <ListItemAvatar>
-                  <Avatar src={item.image} variant="square" sx={{ width: 56, height: 56, mr: 2 }} />
-                </ListItemAvatar>
-                <ListItemText 
-                  primary={item.title} 
-                  secondary={`${item.price.toFixed(2)}€ x ${item.quantity}`} 
-                />
-                <Typography variant="h6" sx={{ mr: 2 }}>
-                  {(item.price * item.quantity).toFixed(2)}€
+    <Container maxWidth={false} sx={{ pt: 4, pb: 4, px: { xs: 2, md: 5 } }}>
+      <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/')} sx={{ mb: 2 }}>
+        Continuar a comprar
+      </Button>
+
+      <Typography variant="h4" fontWeight="bold" gutterBottom sx={{ mb: 3 }}>
+        Carrinho de Compras ({cart.length} itens)
+      </Typography>
+
+      <Grid container spacing={4}>
+        <Grid size={{ xs: 12, md: 8 }}>
+          <Paper elevation={2}>
+            <List sx={{ p: 0 }}>
+              {cart.map((item, index) => (
+                <Box key={item.id}>
+                  <ListItem
+                    alignItems="center"
+                    sx={{ py: 3 }}
+                    secondaryAction={
+                      <IconButton edge="end" onClick={() => removeFromCart(item.id)} color="error" title="Remover">
+                        <DeleteIcon />
+                      </IconButton>
+                    }
+                  >
+                    <ListItemAvatar>
+                      <Avatar 
+                        src={item.image} 
+                        variant="square" 
+                        sx={{ width: 100, height: 100, mr: 3, objectFit: 'contain' }} 
+                      />
+                    </ListItemAvatar>
+                    
+                    <ListItemText
+                      secondaryTypographyProps={{ component: 'div' }} 
+                      primary={
+                        <Typography variant="h6" sx={{ mb: 1 }}>
+                          {item.title}
+                        </Typography>
+                      }
+                      secondary={
+                        <Box component="div">
+                          <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                            Categoria: {item.category}
+                          </Typography>
+                          <Typography variant="body1" fontWeight="bold">
+                            {item.price.toFixed(2)}€ x {item.quantity} unidade(s)
+                          </Typography>
+                        </Box>
+                      }
+                    />
+                    
+                    <Typography 
+                        variant="h5" 
+                        fontWeight="bold" 
+                        color="primary" 
+                        sx={{ display: { xs: 'none', sm: 'block' }, minWidth: '100px', textAlign: 'right', mr: 2 }}
+                    >
+                      {(item.price * item.quantity).toFixed(2)}€
+                    </Typography>
+                  </ListItem>
+                  {index < cart.length - 1 && <Divider component="li" />}
+                </Box>
+              ))}
+            </List>
+          </Paper>
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 4 }}>
+          <Card elevation={3} sx={{ position: 'sticky', top: 20 }}>
+            <CardContent sx={{ p: 3 }}>
+              <Typography variant="h5" gutterBottom fontWeight="bold">
+                Resumo do Pedido
+              </Typography>
+              <Divider sx={{ my: 2 }} />
+              
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+                <Typography variant="body1">Subtotal:</Typography>
+                <Typography variant="body1">{total.toFixed(2)}€</Typography>
+              </Box>
+              
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+                <Typography variant="body1">Portes de Envio:</Typography>
+                <Typography variant="body1" color="success.main">Grátis</Typography>
+              </Box>
+
+              <Divider sx={{ mb: 2 }} />
+
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 4 }}>
+                <Typography variant="h5" fontWeight="bold">Total:</Typography>
+                <Typography variant="h4" color="primary" fontWeight="bold">
+                  {total.toFixed(2)}€
                 </Typography>
-              </ListItem>
-              <Divider />
-            </div>
-          ))}
-        </List>
-        <Box sx={{ p: 3, bgcolor: '#f5f5f5', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Button color="error" onClick={clearCart}>Limpar</Button>
-            <Typography variant="h5" fontWeight="bold">Total: {total.toFixed(2)}€</Typography>
-        </Box>
-      </Paper>
-    </Box>
+              </Box>
+
+              <Button 
+                variant="contained" 
+                size="large" 
+                fullWidth 
+                sx={{ py: 1.5, fontSize: '1.1rem' }}
+                onClick={() => alert('Compra finalizada com sucesso!')}
+              >
+                Finalizar Compra
+              </Button>
+
+              <Button 
+                color="error" 
+                fullWidth 
+                sx={{ mt: 2 }} 
+                onClick={clearCart}
+              >
+                Esvaziar Carrinho
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </Container>
   );
 }
