@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Home from './pages/Home.tsx';
 import ProductDetail from './pages/ProductDetail.tsx';
 import Cart from './pages/Cart.tsx';
-import { AppBar, Toolbar, Typography, Button, Container } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 
 function App() {
   return (
@@ -17,13 +17,13 @@ function App() {
         </Toolbar>
       </AppBar>
 
-      <Container sx={{ mt: 2 }}>
+     <Box sx={{ p: 0 }}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
         </Routes>
-      </Container>
+      </Box>
     </BrowserRouter>
   );
 }
