@@ -2,11 +2,15 @@ import { Card, CardContent, CardMedia, Typography, Button, Box } from '@mui/mate
 import { Link } from 'react-router-dom';
 import type { Product } from '../services/api';
 
+import { useCart } from '../context/CartContext'; 
+
 interface Props {
   product: Product;
 }
 
 export default function ProductCard({ product }: Props) {
+  const { addToCart } = useCart(); 
+
   return (
     <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <CardMedia
@@ -39,14 +43,22 @@ export default function ProductCard({ product }: Props) {
         </Typography>
       </CardContent>
 
-      <Box sx={{ p: 2, pt: 0 }}>
+      <Box sx={{ p: 2, pt: 0, display: 'flex', gap: 1 }}>
         <Button 
-          variant="contained" 
+          variant="outlined" 
           fullWidth 
           component={Link} 
           to={`/product/${product.id}`}
         >
-          Ver Detalhes
+          Detalhes
+        </Button>
+        
+        <Button 
+          variant="contained" 
+          fullWidth
+          onClick={() => addToCart(product)}
+        >
+          Adicionar
         </Button>
       </Box>
     </Card>
