@@ -2,11 +2,16 @@ import { Box, Typography, Button, List, ListItem, ListItemText, ListItemAvatar, 
 import DeleteIcon from '@mui/icons-material/Delete';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+// NOVOS IMPORTS PARA OS BOTÕES
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 
 export default function Cart() {
-  const { cart, removeFromCart, total, clearCart } = useCart();
+  // ADICIONEI O 'addToCart' AQUI PARA O BOTÃO '+' FUNCIONAR
+  const { cart, removeFromCart, addToCart, total, clearCart } = useCart();
   const navigate = useNavigate();
 
   if (cart.length === 0) {
@@ -75,9 +80,32 @@ export default function Cart() {
                           <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
                             Categoria: {item.category}
                           </Typography>
-                          <Typography variant="body1" fontWeight="bold">
-                            {item.price.toFixed(2)}€ x {item.quantity} unidade(s)
-                          </Typography>
+                          
+                          {/* --- NOVA ÁREA DE QUANTIDADE --- */}
+                          <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+                             <Typography variant="body1" sx={{ mr: 2 }}>
+                                {item.price.toFixed(2)}€
+                             </Typography>
+                             
+                             {/* Caixa de controlo de quantidade */}
+                             <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid #ddd', borderRadius: 1 }}>
+                                {/* Botão Menos / Remover */}
+                                <IconButton size="small" onClick={() => removeFromCart(item.id)} color="default">
+                                   <RemoveIcon fontSize="small" />
+                                </IconButton>
+
+                                <Typography sx={{ mx: 2, fontWeight: 'bold' }}>
+                                   {item.quantity}
+                                </Typography>
+
+                                {/* Botão Mais */}
+                                <IconButton size="small" onClick={() => addToCart(item)} color="primary">
+                                   <AddIcon fontSize="small" />
+                                </IconButton>
+                             </Box>
+                          </Box>
+                          {/* ------------------------------- */}
+
                         </Box>
                       }
                     />
