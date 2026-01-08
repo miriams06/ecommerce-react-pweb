@@ -1,7 +1,7 @@
-import { Card, CardContent, CardMedia, Typography, Button, Box } from '@mui/material';
+import { useState } from 'react';
+import { Card, CardContent, CardMedia, Typography, Button, Box, Snackbar, Alert } from '@mui/material';
 import { Link } from 'react-router-dom';
 import type { Product } from '../services/api';
-
 import { useCart } from '../context/CartContext'; 
 
 interface Props {
@@ -9,7 +9,17 @@ interface Props {
 }
 
 export default function ProductCard({ product }: Props) {
-  const { addToCart } = useCart(); 
+  const { addToCart } = useCart();
+  const [open, setOpen] = useState(false);
+
+  const handleAddToCart = () => {
+    addToCart(product);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -39,7 +49,7 @@ export default function ProductCard({ product }: Props) {
         </Typography>
 
         <Typography variant="h5" color="primary" sx={{ mt: 1, fontWeight: 'bold' }}>
-          {product.price.toFixed(2)}€
+          ${product.price.toFixed(2)}
         </Typography>
       </CardContent>
 
@@ -50,17 +60,23 @@ export default function ProductCard({ product }: Props) {
           component={Link} 
           to={`/product/${product.id}`}
         >
-          Detalhes
+          Details
         </Button>
         
         <Button 
           variant="contained" 
           fullWidth
-          onClick={() => addToCart(product)}
+          onClick={handleAddToCart} 
         >
-          Adicionar
+          Add
         </Button>
       </Box>
+
+      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Product added to cart!
+        </Alert>
+      </Snackbar>
     </Card>
   );
 }

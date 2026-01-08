@@ -16,7 +16,7 @@ function Navbar() {
             sx={{ flexGrow: 1, cursor: 'pointer' }}
             onClick={() => navigate('/')}
         >
-          Minha Loja
+          My Store
         </Typography>
 
         <Box>

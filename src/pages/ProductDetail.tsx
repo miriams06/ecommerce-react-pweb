@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Typography, Button, CircularProgress, Paper, Rating, Divider } from '@mui/material';
+import { Box, Typography, Button, CircularProgress, Paper, Rating, Divider, Snackbar, Alert } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useCart } from '../context/CartContext';
@@ -13,6 +13,7 @@ export default function ProductDetail() {
   
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -24,14 +25,25 @@ export default function ProductDetail() {
       .catch(() => setLoading(false));
   }, [id]);
 
+  const handleAddToCart = () => {
+    if (product) {
+      addToCart(product);
+      setOpen(true);
+    }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}><CircularProgress /></Box>;
   
-  if (!product) return <Typography>Produto não encontrado.</Typography>;
+  if (!product) return <Typography>Product not found.</Typography>;
 
   return (
     <Box sx={{ p: 4, maxWidth: '1200px', margin: '0 auto' }}>
       <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/')} sx={{ mb: 3 }}>
-        Voltar
+        Back
       </Button>
 
       <Paper elevation={3} sx={{ p: 4, display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4 }}>
@@ -49,7 +61,7 @@ export default function ProductDetail() {
           </Box>
 
           <Typography variant="h4" color="primary" sx={{ mb: 3, fontWeight: 'bold' }}>
-            {product.price.toFixed(2)}€
+            ${product.price.toFixed(2)}
           </Typography>
 
           <Typography paragraph>{product.description}</Typography>
@@ -59,13 +71,19 @@ export default function ProductDetail() {
             variant="contained" 
             size="large" 
             startIcon={<ShoppingCartIcon />}
-            onClick={() => addToCart(product)}
+            onClick={handleAddToCart}
             fullWidth
           >
-            Adicionar ao Carrinho
+            Add to Cart
           </Button>
         </Box>
       </Paper>
+
+      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Product added to cart!
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
