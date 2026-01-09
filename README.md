@@ -1,73 +1,82 @@
-# React + TypeScript + Vite
+# Loja Online React - Projeto PWEB
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este projeto é uma aplicação de E-commerce desenvolvida em React que consome a FakeStoreAPI. Permite listar produtos, filtrar por categorias, ver detalhes e gerir um carrinho de compras com persistência de dados.
 
-Currently, two official plugins are available:
+## Autores
+* **Aluno 1:** Íris Nunes (Nº A047325)
+* **Aluno 2:** Miriam Silva (Nº A046587)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Como Executar o Projeto
 
-## React Compiler
+1. **Clonar o repositório:**
+   ```bash
+   git clone https://github.com/miriams06/ecommerce-react-pweb.git
+   cd ecommerce-react-pweb
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+2.  **Instalar dependências:**
+    ```bash
+    npm install
+    ```
 
-## Expanding the ESLint configuration
+3.  **Executar o servidor de desenvolvimento:**
+    ```bash
+    npm run dev
+    ```
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+4.  **Aceder:** Abra o browser em `http://localhost:5173/` (ou a porta indicada no terminal).
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Funcionalidades Implementadas
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+O projeto cumpre todos os requisitos obrigatórios e inclui melhorias de UX:
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 1. Listagem e Navegação
+* Listagem de produtos em grelha responsiva (Material UI Grid v2).
+* Interface adaptada a Mobile e Desktop.
+* Layout "Full Width" na página inicial.
+* Navegação entre páginas usando `React Router` (Home, Detalhe, Carrinho).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 2. Filtros e Pesquisa
+* **Pesquisa por nome:** Filtra produtos em tempo real.
+* **Filtro por Categoria:** Dropdown dinâmico carregado via API.
+* **Mensagens de Estado:** Feedback visual quando a pesquisa não retorna resultados.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 3. Detalhe do Produto
+*  Página dedicada com imagem grande, descrição, categoria e rating.
+*  Botão para voltar à listagem.
+*  Botão de adicionar ao carrinho com feedback imediato.
+
+### 4. Carrinho de Compras (Gestão de Estado)
+* **Context API:** Estado global acessível em toda a aplicação.
+* **Persistência:** O carrinho mantém-se gravado no `localStorage` após refresh.
+* Adicionar, Remover e Alterar quantidades de produtos.
+* Cálculo automático de Subtotal e Total.
+* Botão para esvaziar carrinho (Clear Cart).
+
+### 5. Interface e UX (Extra)
+* **Feedback Visual (Snackbars):** Notificações "Toast" ao adicionar produtos ao carrinho.
+* **Loading States:** Indicadores de carregamento (Spinners) enquanto a API responde.
+* **Tratamento de Erros:** Mensagens amigáveis caso a API falhe.
+* **Idioma:** Interface totalmente traduzida para Inglês.
+
+---
+
+## API e Endpoints
+
+A API escolhida foi a **FakeStoreAPI** (https://fakestoreapi.com).
+O consumo é centralizado no serviço `src/services/api.ts`.
+
+**Endpoints utilizados:**
+* `GET /products` - Obter todos os produtos (Home).
+* `GET /products/categories` - Obter lista de categorias (Filtros).
+* `GET /products/:id` - Obter detalhes de um único produto (Página de Detalhe).
+
+---
+
+## Tecnologias Usadas
+
+* **Core:** React, TypeScript, Vite.
+* **UI Framework:** Material UI (MUI) v6 + Emotion.
+* **Routing:** React Router Dom.
+* **Icons:** Material UI Icons.
