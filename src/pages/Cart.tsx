@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 
 export default function Cart() {
-  const { cart, removeFromCart, addToCart, total, clearCart } = useCart();
+  const { cart, removeFromCart, addToCart, decreaseQuantity, total, clearCart } = useCart();
   const navigate = useNavigate();
 
   if (cart.length === 0) {
@@ -86,7 +86,7 @@ export default function Cart() {
                              </Typography>
                              
                              <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid #ddd', borderRadius: 1 }}>
-                                <IconButton size="small" onClick={() => removeFromCart(item.id)} color="default">
+                                <IconButton size="small" onClick={() => decreaseQuantity(item.id)} color="default">
                                    <RemoveIcon fontSize="small" />
                                 </IconButton>
 
@@ -122,7 +122,6 @@ export default function Cart() {
         <Grid size={{ xs: 12, md: 4 }}>
           <Card elevation={3} sx={{ position: 'sticky', top: 20 }}>
             <CardContent sx={{ p: 3 }}>
-              {/* TRADUZIDO */}
               <Typography variant="h5" gutterBottom fontWeight="bold">
                 Order Summary
               </Typography>
